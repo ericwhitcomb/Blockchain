@@ -83,16 +83,13 @@ class Blockchain(object):
         :return: <int> A valid proof
         """
         proof = 0
-
-        # for block 1, hash(1, p) = 000000x
-
-        while not valid_proof(last_proof, proof):
+        while not Blockchain.valid_proof(last_proof, proof):
             proof += 1
 
         return proof
 
     @staticmethod
-    def valid_proof(proof):
+    def valid_proof(last_proof, proof):
         """
         Validates the Proof:  Does hash(last_block_string, proof) contain 6
         leading zeroes?
@@ -100,8 +97,11 @@ class Blockchain(object):
         :param proof: <string> The proposed proof
         :return: <bool> Return true if the proof is valid, false if it is not
         """
-        # TODO
-        pass
+        h = hashlib.sha256(f'{last_proof}{proof}'.encode()).hexdigest()
+        if h[0:6] == '000000':
+            return True
+
+        return False
 
     def valid_chain(self, chain):
         """
